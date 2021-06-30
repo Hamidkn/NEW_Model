@@ -17,10 +17,10 @@ The Rung-Kuta method was used to solve this ode problem.
 x_1 (t+1)= ∆t*(x_2 )+ x_1 (t)
 x_2 (t+1)=∆t*(1/m* F(x)* i(t)/0.1)+x_2 (t)
 
-![Screenshot](position.png)
+![](position.png)
 
-![Screenshot](Force.png)
+![](Force.png)
 
-![Screenshot](current.png)
+![](current.png)
 
-![Screenshot](velocity.png)
+![](velocity.png)
