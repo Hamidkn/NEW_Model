@@ -92,9 +92,7 @@ print(len(test), 'test examples', np.shape(test))
 
 # You can see that the dataset returns a dictionary of column names
 # (from the dataframe) that map to column values from rows in the dataframe.
-# batch_size = 5
-# train_ds = dataframe_to_dataset(train, batch_size=batch_size)
-# [(train_features, label_batch)] = train_ds.take(1)
+
 batch_size = 32
 train_ds = dataframe_to_dataset(train, batch_size=batch_size)
 val_ds = dataframe_to_dataset(val, shuffle=False, batch_size=batch_size)
