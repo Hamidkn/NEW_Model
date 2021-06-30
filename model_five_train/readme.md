@@ -102,7 +102,7 @@ after training for about 10 epochs we get this figure.
 and the summary of the model is as bellow: 
 
 Model: "model"
-__________________________________________________________________________________________________
+___________________________________________________________________________________
 Layer (type)                    Output Shape         Param #     Connected to                     
 ==================================================================================================
 current1 (InputLayer)           [(None, 1)]          0                                            
@@ -141,7 +141,7 @@ concatenate (Concatenate)       (None, 4)            0           tf.math.truediv
                                                                  tf.math.truediv_1[0][0]          
                                                                  tf.math.truediv_2[0][0]          
                                                                  tf.math.truediv_3[0][0]          
-__________________________________________________________________________________________________
+________________________________________________________________________________________________
 dense (Dense)                   (None, 32)           160         concatenate[0][0]                
 __________________________________________________________________________________________________
 dropout (Dropout)               (None, 32)           0           dense[0][0]                      
@@ -153,6 +153,7 @@ Trainable params: 193
 Non-trainable params: 0
 __________________________________________________________________________________________________
 
+![](Images/summary.png)
 # visualize the Accuracy and loss and MSE
 if we plot the accuracy and loss and MSE for the model, we will get following figures, which are indicates the model is not properly work. :) 
 
