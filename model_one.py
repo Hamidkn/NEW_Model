@@ -65,20 +65,20 @@ def dataframe_to_dataset(dataframe):
     ds = ds.shuffle(buffer_size=len(dataframe))
     return ds
 
-def get_compiled_model(all_features):
-    # model = Sequential()
-    # model.add(Dense(40,activation='relu'))
-    # model.add(Dense(40, activation='relu'))
-    # model.add(Dense(1))
+# def get_compiled_model(all_features):
+#     # model = Sequential()
+#     # model.add(Dense(40,activation='relu'))
+#     # model.add(Dense(40, activation='relu'))
+#     # model.add(Dense(1))
 
-    # model.compile(optimizer='adam',loss=tf.keras.losses.MeanSquaredError(),metrics=['mse'])
-    x = tf.keras.layers.Dense(40, activation="relu")(all_features)
-    x = tf.keras.layers.Dropout(0.5)(x)
-    output = tf.keras.layers.Dense(1, activation="sigmoid")(x)
-    model = keras.Model(all_inputs, output)
-    model.compile("adam", "mean_squared_error", metrics=["mse"])
+#     # model.compile(optimizer='adam',loss=tf.keras.losses.MeanSquaredError(),metrics=['mse'])
+#     x = tf.keras.layers.Dense(40, activation="relu")(all_features)
+#     x = tf.keras.layers.Dropout(0.5)(x)
+#     output = tf.keras.layers.Dense(1, activation="sigmoid")(x)
+#     model = keras.Model(all_inputs, output)
+#     model.compile("adam", "mean_squared_error", metrics=["mse"])
 
-    return model
+#     return model
 
 from tensorflow.keras.layers.experimental.preprocessing import IntegerLookup
 from tensorflow.keras.layers.experimental.preprocessing import Normalization
@@ -138,6 +138,7 @@ Ftotal = np.zeros(int(u))
 j = 0
 
 x1, x2, Ftotal, curr1, curr2 = motion_profile(dt, u, x1, x2, Ftotal, curr1, curr2)
+draw_plots(t,x1, x2, Ftotal, curr1, curr2)
 
 # print(np.shape(curr1))
 # # draw_plots(t, x1, x2, Ftotal, curr1, curr2)
@@ -148,64 +149,64 @@ x1, x2, Ftotal, curr1, curr2 = motion_profile(dt, u, x1, x2, Ftotal, curr1, curr
 # Ftotal = np.reshape(110000,1)
 # print(np.shape(curr1))
 
-inp = [curr1, curr2, Ftotal, x2, x1]
-# inp = np.reshape(110000,5)
-print(np.shape(inp))
-# for i in range(len(inp)):
-#      for c1, c2, f, x2, x1 in zip(*inp):
-#      # print(c1, c2, f, x2, x1)
-#           inp[i] = [c1, c2, f, x2, x1]
-nparray = np.array(inp)
-transpose = nparray.transpose()
-inp = transpose.tolist()
-df = pd.DataFrame(inp, columns=('current1','current2','Ftotal','velocity','position'))
-# df = df.transpose()
-print(df)
-print(df.shape)
+# inp = [curr1, curr2, Ftotal, x2, x1]
+# # inp = np.reshape(110000,5)
+# print(np.shape(inp))
+# # for i in range(len(inp)):
+# #      for c1, c2, f, x2, x1 in zip(*inp):
+# #      # print(c1, c2, f, x2, x1)
+# #           inp[i] = [c1, c2, f, x2, x1]
+# nparray = np.array(inp)
+# transpose = nparray.transpose()
+# inp = transpose.tolist()
+# df = pd.DataFrame(inp, columns=('current1','current2','Ftotal','velocity','position'))
+# # df = df.transpose()
+# print(df)
+# print(df.shape)
 
-val_data = df.sample(frac=0.2, random_state=1337)
-train_data = df.drop(val_data.index)
+# val_data = df.sample(frac=0.2, random_state=1337)
+# train_data = df.drop(val_data.index)
 
-print(
-    "Using %d samples for training and %d for validation"
-    % (len(train_data), len(val_data))
-)
+# print(
+#     "Using %d samples for training and %d for validation"
+#     % (len(train_data), len(val_data))
+# )
 
-train_ds = dataframe_to_dataset(train_data)
-val_ds = dataframe_to_dataset(val_data)
+# train_ds = dataframe_to_dataset(train_data)
+# val_ds = dataframe_to_dataset(val_data)
 
-for x, y in train_ds.take(1):
-    print("Input:", x)
-    print("Target:", y)
+# for x, y in train_ds.take(1):
+#     print("Input:", x)
+#     print("Target:", y)
 
-train_ds = train_ds.batch(32)
-val_ds = val_ds.batch(32)
+# train_ds = train_ds.batch(32)
+# val_ds = val_ds.batch(32)
 
-current1 = keras.Input(shape=(1,), name="current1")
-current2 = keras.Input(shape=(1,), name="current2")
-Ftotal = keras.Input(shape=(1,), name="Ftotal")
-velocity = keras.Input(shape=(1,), name="velocity")
+# current1 = keras.Input(shape=(1,), name="current1")
+# current2 = keras.Input(shape=(1,), name="current2")
+# Ftotal = keras.Input(shape=(1,), name="Ftotal")
+# velocity = keras.Input(shape=(1,), name="velocity")
 
-all_inputs = [
-    current1,
-    current2,
-    Ftotal,
-    velocity,
-]
+# all_inputs = [
+#     current1,
+#     current2,
+#     Ftotal,
+#     velocity,
+# ]
 
-current1_encoded = encode_numerical_feature(current1, "current1", train_ds)
-current2_encoded = encode_numerical_feature(current2, "current2", train_ds)
-Ftotal_encoded = encode_numerical_feature(Ftotal, "Ftotal", train_ds)
-velocity_encoded = encode_numerical_feature(velocity, "velocity", train_ds)
+# current1_encoded = encode_numerical_feature(current1, "current1", train_ds)
+# current2_encoded = encode_numerical_feature(current2, "current2", train_ds)
+# Ftotal_encoded = encode_numerical_feature(Ftotal, "Ftotal", train_ds)
+# velocity_encoded = encode_numerical_feature(velocity, "velocity", train_ds)
 
-all_features = tf.keras.layers.concatenate(
-    [
-        current1_encoded,
-        current2_encoded,
-        Ftotal_encoded,
-        velocity_encoded,
-    ]
-)
+# all_features = tf.keras.layers.concatenate(
+#     [
+#         current1_encoded,
+#         current2_encoded,
+#         Ftotal_encoded,
+#         velocity_encoded,
+#     ]
+# )
 
 
 # x = tf.keras.layers.Dense(40, activation="relu")
@@ -213,7 +214,7 @@ all_features = tf.keras.layers.concatenate(
 # output = tf.keras.layers.Dense(1, activation="sigmoid")(x)
 # model = keras.Model(all_inputs, output)
 # model.compile("adam", "mean_squared_error", metrics=["mse"])
-model = get_compiled_model(all_features)
+# model = get_compiled_model(all_features)
 
 # target = df.pop('position')
 
@@ -277,5 +278,5 @@ MAX_EPOCHS = 4
 
 # model = get_compiled_model()
 
-keras.utils.plot_model(model, show_shapes=True, rankdir="LR")
-model.fit(train_ds, epochs=MAX_EPOCHS, validation_data=val_ds)
+# keras.utils.plot_model(model, show_shapes=True, rankdir="LR")
+# model.fit(train_ds, epochs=MAX_EPOCHS, validation_data=val_ds)
