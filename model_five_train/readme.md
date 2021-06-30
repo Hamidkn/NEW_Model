@@ -158,10 +158,13 @@ ________________________________________________________________________________
 if we plot the accuracy and loss and MSE for the model, we will get following figures, which are indicates the model is not properly work. :) 
 
 Accuracy
+
 ![](Images/fig_Accuracy.png)
 
 Loss
+
 ![](Images/fig_loss.png)
 
 MSE
+
 ![](Images/fig_MSE.png)
