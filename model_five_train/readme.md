@@ -76,3 +76,91 @@ for header in ['current1','current2','Ftotal','velocity']:
   all_inputs.append(numeric_col)
   encoded_features.append(encoded_numeric_col)
 ```
+
+# Create, compile, and train the model
+Now you can create our end-to-end model.
+```
+all_features = tf.keras.layers.concatenate(encoded_features)
+x = tf.keras.layers.Dense(32, activation="relu")(all_features)
+x = tf.keras.layers.Dropout(0.5)(x)
+output = tf.keras.layers.Dense(1)(x)
+model = tf.keras.Model(all_inputs, output)
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.MeanSquaredError(),
+              metrics=["accuracy"])
+# Train the model
+model_info = model.fit(train_ds, epochs=MAX_EPOCHS, validation_data=val_ds)
+```
+If we visualize the our connectivity graph, we will get bellow figure.
+
+![](model_five.png)
+
+after training for about 10 epochs we get this figure.
+![](Images/fitmodel.png)
+
+# Summary of the Model
+and the summary of the model is as bellow: 
+
+Model: "model"
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+current1 (InputLayer)           [(None, 1)]          0                                            
+__________________________________________________________________________________________________
+current2 (InputLayer)           [(None, 1)]          0                                            
+__________________________________________________________________________________________________
+Ftotal (InputLayer)             [(None, 1)]          0                                            
+__________________________________________________________________________________________________
+velocity (InputLayer)           [(None, 1)]          0                                            
+__________________________________________________________________________________________________
+tf.convert_to_tensor (TFOpLambd (None, 1)            0           current1[0][0]                   
+__________________________________________________________________________________________________
+tf.convert_to_tensor_1 (TFOpLam (None, 1)            0           current2[0][0]                   
+__________________________________________________________________________________________________
+tf.convert_to_tensor_2 (TFOpLam (None, 1)            0           Ftotal[0][0]                     
+__________________________________________________________________________________________________
+tf.convert_to_tensor_3 (TFOpLam (None, 1)            0           velocity[0][0]                   
+__________________________________________________________________________________________________
+tf.math.subtract (TFOpLambda)   (None, 1)            0           tf.convert_to_tensor[0][0]       
+__________________________________________________________________________________________________
+tf.math.subtract_1 (TFOpLambda) (None, 1)            0           tf.convert_to_tensor_1[0][0]     
+__________________________________________________________________________________________________
+tf.math.subtract_2 (TFOpLambda) (None, 1)            0           tf.convert_to_tensor_2[0][0]     
+__________________________________________________________________________________________________
+tf.math.subtract_3 (TFOpLambda) (None, 1)            0           tf.convert_to_tensor_3[0][0]     
+__________________________________________________________________________________________________
+tf.math.truediv (TFOpLambda)    (None, 1)            0           tf.math.subtract[0][0]           
+__________________________________________________________________________________________________
+tf.math.truediv_1 (TFOpLambda)  (None, 1)            0           tf.math.subtract_1[0][0]         
+__________________________________________________________________________________________________
+tf.math.truediv_2 (TFOpLambda)  (None, 1)            0           tf.math.subtract_2[0][0]         
+__________________________________________________________________________________________________
+tf.math.truediv_3 (TFOpLambda)  (None, 1)            0           tf.math.subtract_3[0][0]         
+__________________________________________________________________________________________________
+concatenate (Concatenate)       (None, 4)            0           tf.math.truediv[0][0]            
+                                                                 tf.math.truediv_1[0][0]          
+                                                                 tf.math.truediv_2[0][0]          
+                                                                 tf.math.truediv_3[0][0]          
+__________________________________________________________________________________________________
+dense (Dense)                   (None, 32)           160         concatenate[0][0]                
+__________________________________________________________________________________________________
+dropout (Dropout)               (None, 32)           0           dense[0][0]                      
+__________________________________________________________________________________________________
+dense_1 (Dense)                 (None, 1)            33          dropout[0][0]                    
+==================================================================================================
+Total params: 193
+Trainable params: 193
+Non-trainable params: 0
+__________________________________________________________________________________________________
+
+# visualize the Accuracy and loss and MSE
+if we plot the accuracy and loss and MSE for the model, we will get following figures, which are indicates the model is not properly work. :) 
+
+Accuracy
+![](fig_Accuracy.png)
+
+Loss
+![](fig_loss.png)
+
+MSE
+![](fig_MSE.png)
